@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
      # Our app
     "crm",
+    'django_crontab'
 
     # GraphQL
     "graphene_django",
@@ -130,3 +131,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CRONJOBS = [
+    # Run heartbeat every minute
+    ('*/1 * * * *', 'crm.cron.log_crm_heartbeat'),
+
+    # Run low stock update every 2 minutes
+    ('*/2 * * * *', 'crm.cron.updateLowStockProducts'),
+]

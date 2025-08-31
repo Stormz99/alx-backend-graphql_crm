@@ -1,39 +1,36 @@
 from django.db import models
-from django.core.validators import RegexValidator, MinValueValidator
 
 class Customer(models.Model):
-    name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(
-        max_length=20,
-        blank=True,
-        null=True,
-        validators=[
-            RegexValidator(
-                regex=r'^(\+\d{10,15}|\d{3}-\d{3}-\d{4})$',
-                message="Phone must be in format +1234567890 or 123-456-7890"
-            )
-        ]
-    )
+    name= models.CharField(max_length=100)
+    email= models.EmailField(unique=True)
+    phone= models.CharField(max_length=11)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.name
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(decimal_places=2, max_digits=10)
     stock = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.name
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE,related_name='orders')
     products = models.ManyToManyField(Product)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    total_amount = models.DecimalField(decimal_places=2, max_digits=10)
     order_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Order #{self.id} - {self.customer.name}"
+        return self.customer.name

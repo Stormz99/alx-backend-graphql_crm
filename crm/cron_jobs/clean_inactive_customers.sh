@@ -1,4 +1,6 @@
 #!/bin/bash
+# Script to delete customers with no orders in the past year and log the result
+
 cd "$(dirname "${BASH_SOURCE[0]}")/../.."
 
 cwd=$(pwd)
